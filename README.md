@@ -2,10 +2,14 @@
 
 ## Introduction
 
-`mk` is an experimental wrapper for the ubiquitous GNU make, widely-used for
-automating routine tasks in countless software projects. `mk` is meant to
-enhance the functionality of GNU make by allowing the execution of make commands
-from any directory within a project, as opposed to the project's root alone.
+In this project you'll find an experimental wrapper for the ubiquitous GNU make,
+named `mk`.  GNU Make is a widely-used command line tool for automating routine
+tasks, from instructions defined in a `Makefile`, present in countless software
+projects.
+
+This tool, `mk`, enhances the functionality of GNU make by allowing the
+execution of `make` commands from any directory within a project, not just the
+project's root.
 
 Additionally, `mk` will parse a project's Makefile and generate help text. Just
 write a comment in your Makefile prefixed with `#>` to describe the target that
@@ -29,8 +33,8 @@ somewhere in your system `PATH`.
 
 ## Usage
 
-The following examples use the [`Makefile`](`Makefile`) in this project. But it
-will work the same in any project that contains a `Makefile`.
+The following examples use the [`Makefile`](`Makefile`) in this project, but the
+same concepts apply to any project that contains a `Makefile`.
 
 ```zsh
 ❯ mk # used without arguments, `mk` produces help output
@@ -61,7 +65,7 @@ The `mk` command wraps make targets, allowing you to run them from anywhere in t
 ❯ cd subfolder/subfolder/subfolder 
 ~/src/mk/subfolder/subfolder/subfolder
 ❯ mk -h # `mk -h` or `mk --help` do the same thing
-❯ .     #  even from a sub-folder in your project
+❯       #  even from a sub-folder in your project
 An experimental command-line wrapper of GNU Make.
 
 Usage: mk [OPTIONS] [COMMAND]
