@@ -44,8 +44,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          MK_VERSION=${{ steps.version.outputs.version }} \
-            gh release create --draft --title "${MK_VERSION}" "${MK_VERSION}"
+          gh release create --draft \
+            --title "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.version }}"
 
   build-release:
     name: build-release
