@@ -1,5 +1,3 @@
-use env_logger;
-use log;
 use std::error::Error;
 use std::process;
 
@@ -9,8 +7,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     // let cwd = env::current_dir()?;
     let cli = mk::CommandLine::new();
 
-    // Traverse upwards through the filesystem to find a Makefile.
     let mut makefile = mk::Makefile::new();
+    log::debug!("Found Makefile at: {:?}", makefile.cwd);
+
+    // Traverse upwards through the filesystem, stop if we find a
+    // Makefile and parse it, or if we see a .git directory signifying
+    // the root of the project.
     match makefile.find_and_parse() {
         Ok(_) => {}
         Err(e) => {
@@ -18,13 +20,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             process::exit(1);
         }
     }
-    log::debug!("Found Makefile at: {:?}", makefile.cwd);
 
-    if !cli.flags_found {
+    if cli.args_found {
         cli.run("make".to_string(), &cli.args, &makefile.cwd)?;
     }
-
-    // let mut cmd = generate_help(makefile);
 
     let mut parser = makefile.get_arg_parser();
 

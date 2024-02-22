@@ -1,5 +1,4 @@
 use clap::{command, Arg, ArgAction, Command};
-use log;
 use regex::Regex;
 use std::collections::HashSet;
 use std::env;
@@ -12,15 +11,15 @@ use std::process;
 
 pub struct CommandLine {
     pub args: Vec<String>,
-    pub flags_found: bool,
+    pub args_found: bool,
 }
 
 impl CommandLine {
     pub fn new() -> Self {
         let args: Vec<String> = std::env::args().skip(1).collect();
-        let flags_found = args.iter().any(|a| a.starts_with('-'));
+        let args_found = args.iter().any(|a| !a.starts_with('-'));
 
-        CommandLine { args, flags_found }
+        CommandLine { args, args_found }
     }
 
     pub fn run(
