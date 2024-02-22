@@ -1,8 +1,11 @@
 #> The `mk` command wraps make targets, allowing you to run them from anywhere in the project.
 
-#> Run cargo build
-build:
+
+target/debug/mk:
 	cargo build --all
+
+#> Run cargo build
+build: target/debug/mk
 .PHONY: build
 
 #> Run cargo check and cargo test
@@ -24,8 +27,8 @@ format:
 .PHONY: format
 
 #> Print this helpful message
-help:
-	@mk --help
+help: | target/debug/mk
+	@target/debug/mk --help
 .PHONY: help
 
 .DEFAULT_GOAL := help
