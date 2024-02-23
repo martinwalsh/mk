@@ -118,9 +118,9 @@ fn shows_make_error_if_an_invalid_target_is_used() -> Result<(), Box<dyn Error>>
         .arg("invalid")
         .assert()
         .failure()
-        .stderr(predicate::str::contains(
-            r#"*** No rule to make target `invalid'"#,
-        ));
+        .stderr(predicate::str::is_match(
+            r###"\*\*\* No rule to make target [`']invalid'"###,
+        ).unwrap());  // Some versions of make use a leading backtick, some don't.
 
     Ok(())
 }
