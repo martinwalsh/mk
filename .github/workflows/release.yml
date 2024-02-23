@@ -54,9 +54,12 @@ jobs:
       - name: Create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create $VERSION --draft --verify-tag --title $VERSION
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --draft --verify-tag --title "${{ steps.version.outputs.version }}" --generate-notes
     outputs:
       version: ${{ steps.version.outputs.version }}
+
 
   build-release:
     name: build-release
@@ -164,3 +167,13 @@ jobs:
       shell: bash
       run: |
         gh release upload "${{ needs.create-release.outputs.version }}" "${{ steps.archive.outputs.asset }}" "${{ steps.archive.outputs.asset_sum }}"
+
+  publish-release:
+    name: publish-release
+    needs: ['build-release']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Finalize Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${{ steps.version.outputs.version }}" --draft=false
