@@ -3,6 +3,7 @@ use regex::Regex;
 use std::collections::HashSet;
 use std::env;
 use std::error;
+use std::ffi::OsString;
 use std::fs;
 use std::io;
 use std::os::unix::process::CommandExt;
@@ -10,14 +11,17 @@ use std::path::{Path, PathBuf};
 use std::process;
 
 pub struct CommandLine {
-    pub args: Vec<String>,
+    pub args: Vec<OsString>,
     pub args_found: bool,
 }
 
 impl CommandLine {
     pub fn new() -> Self {
-        let args: Vec<String> = std::env::args().skip(1).collect();
-        let args_found = args.iter().any(|a| !a.starts_with('-'));
+        let args: Vec<OsString> = std::env::args_os().skip(1).collect::<Vec<OsString>>();
+        let args_found = args.iter().any(|a| match a.to_str() {
+            Some(s) => !s.starts_with('-'),
+            None => false,
+        });
 
         CommandLine { args, args_found }
     }
@@ -25,18 +29,19 @@ impl CommandLine {
     pub fn run(
         &self,
         program: String,
-        args: &Vec<String>,
+        args: &Vec<OsString>,
         cwd: &Path,
     ) -> Result<(), Box<dyn error::Error>> {
-        let pwd = std::env::current_dir()?;
-        log::debug!("Will execute and exec: make {}", args.join(" "));
+        log::debug!("Will execute and exec: make | {:?}", args);
 
         env::set_current_dir(cwd)?;
-        process::Command::new(program).args(args).exec();
+        process::Command::new(program)
+            .args(args)
+            .current_dir(cwd)
+            .exec();
 
-        // We shouldn't reach this point. But if we do, let's try to
-        // clean up and move back to the original working directory.
-        env::set_current_dir(pwd)?;
+        // We shouldn't reach this point.
+        // But if we do, let's try to clean up.
         process::exit(1);
     }
 }

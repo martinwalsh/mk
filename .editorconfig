@@ -20,6 +20,6 @@ indent_size = 4
 # denotes a line break in Markdown
 trim_trailing_whitespace = false
 
-[Makefile]
+[{Makefile,*.mk}]
 indent_style = tab
 indent_size = 4
