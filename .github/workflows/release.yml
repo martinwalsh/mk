@@ -154,7 +154,7 @@ jobs:
         gzip "$BIN"
         shasum -a 256 "${BIN}.gz" > "${BIN}.gz.sha256"
         echo "asset=${BIN}.gz" >> $GITHUB_OUTPUT
-        echo "asset_sum=$${BIN}.gz.sha256" >> $GITHUB_OUTPUT
+        echo "asset_sum=${BIN}.gz.sha256" >> $GITHUB_OUTPUT
       id: archive
 
     - name: Upload release archive
