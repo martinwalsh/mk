@@ -143,18 +143,19 @@ jobs:
       shell: bash
       run: |
         ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
-        echo "OUT=target/${{ matrix.target }}/release/mk" >> $GITHUB_ENV
+        echo "outfile=target/${{ matrix.target }}/release/mk" >> $GITHUB_OUTPUT
+        echo "name=mk-${{ matrix.name }}" >> $GITHUB_OUTPUT
+      id: binary
 
     - name: Create archive (Unix)
       shell: bash
       if: matrix.os != 'windows-latest'
       run: |
-        BIN="mk-${{ matrix.name }}"
-        cp "$OUT" "$BIN"
-        gzip "$BIN"
-        shasum -a 256 "${BIN}.gz" > "${BIN}.gz.sha256"
-        echo "asset=${BIN}.gz" >> $GITHUB_OUTPUT
-        echo "asset_sum=${BIN}.gz.sha256" >> $GITHUB_OUTPUT
+        cp "${{ steps.binary.outputs.outfile }}" "${{ steps.binary.outputs.name }}"
+        gzip "${{ steps.binary.outputs.name }}"
+        shasum -a 256 "${{ steps.binary.outputs.name }}.gz" > "${{ steps.binary.outputs.name }}.gz.sha256"
+        echo "asset=${{ steps.binary.outputs.name }}.gz" >> $GITHUB_OUTPUT
+        echo "asset_sum=${{ steps.binary.outputs.name }}.gz.sha256" >> $GITHUB_OUTPUT
       id: archive
 
     - name: Upload release archive
@@ -162,5 +163,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: bash
       run: |
-        version="${{ needs.create-release.outputs.version }}"
-        gh release upload "$version" ${{ steps.archive.outputs.asset }} ${{ steps.archive.outputs.asset_sum }}
+        gh release upload "${{ needs.create-release.outputs.version }}" "${{ steps.archive.outputs.asset }}" "${{ steps.archive.outputs.asset_sum }}"

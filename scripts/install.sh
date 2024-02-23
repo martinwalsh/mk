@@ -59,6 +59,8 @@ cleanup() {
 }
 
 trap cleanup EXIT
+
+echo "Downloading < ${DOWNLOAD_URL} > to < ${TEMP_FILE_GZ} >"
 HTTP_CODE=$(curl -SL --progress-bar "$DOWNLOAD_URL" --output "$TEMP_FILE_GZ" --write-out "%{http_code}")
 if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]]; then
   echo "error: platform ${PLATFORM} (${ARCH}) is unsupported."
