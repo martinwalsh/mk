@@ -113,14 +113,9 @@ fn uses_env_vars_passed_as_arguments() -> Result<(), Box<dyn Error>> {
 fn shows_make_error_if_an_invalid_target_is_used() -> Result<(), Box<dyn Error>> {
     let space = Space::from_fixture("test")?;
 
-    space
-        .bin()
-        .arg("invalid")
-        .assert()
-        .failure()
-        .stderr(predicate::str::is_match(
-            r###"\*\*\* No rule to make target [`']invalid'"###,
-        ).unwrap());  // Some versions of make use a leading backtick, some don't.
+    space.bin().arg("invalid").assert().failure().stderr(
+        predicate::str::is_match(r###"\*\*\* No rule to make target [`']invalid'"###).unwrap(),
+    ); // Some versions of make use a leading backtick, some don't.
 
     Ok(())
 }
