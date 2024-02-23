@@ -60,7 +60,6 @@ cleanup() {
 
 trap cleanup EXIT
 
-echo "Downloading < ${DOWNLOAD_URL} > to < ${TEMP_FILE_GZ} >"
 HTTP_CODE=$(curl -SL --progress-bar "$DOWNLOAD_URL" --output "$TEMP_FILE_GZ" --write-out "%{http_code}")
 if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]]; then
   echo "error: platform ${PLATFORM} (${ARCH}) is unsupported."
@@ -82,9 +81,9 @@ fi
 
 INSTALL_DIR="${HOME}/.local/bin"
 mkdir -p "${INSTALL_DIR}"
-cp -v ${TEMP_FILE} "${INSTALL_DIR}/${NAME}"
+cp ${TEMP_FILE} "${INSTALL_DIR}/${NAME}"
 
-echo "Successfully installed ${NAME} (${VERSION}) to ${INSTALL_DIR}/${NAME}"
+echo "Successfully installed ${NAME} (${VERSION}) to ${INSTALL_DIR}/${NAME}."
 echo "Please add ${INSTALL_DIR} to your PATH to use ${NAME}."
 
 }; __wrap__
