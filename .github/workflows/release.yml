@@ -56,7 +56,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${{ steps.version.outputs.version }}" \
-            --draft --verify-tag --title "${{ steps.version.outputs.version }}" --generate-notes
+            --draft --verify-tag --title "${{ steps.version.outputs.version }}" \
+            --generate-notes
     outputs:
       version: ${{ steps.version.outputs.version }}
 

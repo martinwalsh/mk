@@ -130,6 +130,12 @@ To install, visit the [releases](https://github.com/martinwalsh/mk/releases)
 page, download the appropriate version for your system, extract the `mk` binary,
 and add it to your system's `PATH`.
 
+Alternatively, you can execute the following in a terminal:
+
+```sh
+curl -sSL https://mk.brightops.dev/r/latest | bash
+```
+
 ## Usage
 
 The following usage examples rely on the [`Makefile`](./Makefile) in this project, but the

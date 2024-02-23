@@ -79,11 +79,13 @@ if [ ! -x "$TEMP_FILE" ]; then
   exit 1
 fi
 
-mkdir -p "${HOME/.local/bin}"
-cp -i ${TEMP_FILE} "${HOME/.local/bin}/${NAME}"
 
-echo "Successfully installed ${NAME} (${VERSION}) to ${HOME/.local/bin}/${NAME}"
-echo "Please add ${HOME/.local/bin} to your PATH to use ${NAME}."
+INSTALL_DIR="${HOME}/.local/bin"
+mkdir -p "${INSTALL_DIR}"
+cp -i ${TEMP_FILE} "${INSTALL_DIR}/${NAME}"
+
+echo "Successfully installed ${NAME} (${VERSION}) to ${INSTALL_DIR}/${NAME}"
+echo "Please add ${INSTALL_DIR} to your PATH to use ${NAME}."
 
 }; __wrap__
 
