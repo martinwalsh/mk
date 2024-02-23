@@ -119,3 +119,31 @@ fn shows_make_error_if_an_invalid_target_is_used() -> Result<(), Box<dyn Error>>
 
     Ok(())
 }
+
+#[test]
+fn shows_help_with_documentation() -> Result<(), Box<dyn Error>> {
+    let space = Space::from_fixture("docs")?;
+
+    space
+        .bin()
+        .arg("--help")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("test  Runs the tests"));
+
+    Ok(())
+}
+
+#[test]
+fn shows_help_even_without_documentation() -> Result<(), Box<dyn Error>> {
+    let space = Space::from_fixture("nodocs")?;
+
+    space
+        .bin()
+        .arg("--help")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("test-me"));
+
+    Ok(())
+}

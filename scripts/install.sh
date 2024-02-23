@@ -85,7 +85,7 @@ echo "Please add ${HOME/.local/bin} to your PATH to use ${NAME}."
 
 }; __wrap__
 
-# This file was borrowed from the `rye` project with gratitude
+# This file was borrowed from the `rye` project with gratitude,
 # and slightly modified. The `rye` project's license is included below.
 
 # MIT License
