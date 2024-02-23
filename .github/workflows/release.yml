@@ -90,52 +90,10 @@ jobs:
           target: aarch64-unknown-linux-gnu
           strip: aarch64-linux-gnu-strip
           qemu: qemu-aarch64
-        # - build: stable-arm-gnueabihf
-        #   os: ubuntu-latest
-        #   rust: stable
-        #   target: armv7-unknown-linux-gnueabihf
-        #   strip: arm-linux-gnueabihf-strip
-        #   qemu: qemu-arm
-        # - build: stable-arm-musleabihf
-        #   os: ubuntu-latest
-        #   rust: stable
-        #   target: armv7-unknown-linux-musleabihf
-        #   strip: arm-linux-musleabihf-strip
-        #   qemu: qemu-arm
-        # - build: stable-arm-musleabi
-        #   os: ubuntu-latest
-        #   rust: stable
-        #   target: armv7-unknown-linux-musleabi
-        #   strip: arm-linux-musleabi-strip
-        #   qemu: qemu-arm
-        # - build: stable-powerpc64
-        #   os: ubuntu-latest
-        #   rust: stable
-        #   target: powerpc64-unknown-linux-gnu
-        #   strip: powerpc64-linux-gnu-strip
-        #   qemu: qemu-ppc64
-        # - build: stable-s390x
-        #   os: ubuntu-latest
-        #   rust: stable
-        #   target: s390x-unknown-linux-gnu
-        #   strip: s390x-linux-gnu-strip
-        #   qemu: qemu-s390x
         - build: macos
           os: macos-latest
           rust: nightly
           target: x86_64-apple-darwin
-        # - build: win-msvc
-        #   os: windows-latest
-        #   rust: nightly
-        #   target: x86_64-pc-windows-msvc
-        # - build: win-gnu
-        #   os: windows-latest
-        #   rust: nightly-x86_64-gnu
-        #   target: x86_64-pc-windows-gnu
-        # - build: win32-msvc
-        #   os: windows-latest
-        #   rust: nightly
-        #   target: i686-pc-windows-msvc
 
     steps:
     - name: Checkout repository
@@ -185,13 +143,10 @@ jobs:
       shell: bash
       run: |
         ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
-        # if [ "${{ matrix.os }}" = "windows-latest" ]; then
-        #   bin="target/${{ matrix.target }}/release/mk.exe"
-        # else
         bin="target/${{ matrix.target }}/release/mk"
-        # fi
         echo "BIN=$bin" >> $GITHUB_ENV
 
+    # Is this needed?
     - name: Strip release binary (macos)
       if: matrix.os == 'macos-latest'
       shell: bash
@@ -206,6 +161,7 @@ jobs:
           "ghcr.io/cross-rs/${{ matrix.target }}:main" \
           "${{ matrix.strip }}" \
           "/$BIN"
+    # end
 
     - name: Determine archive name
       shell: bash
@@ -213,22 +169,11 @@ jobs:
         version="${{ needs.create-release.outputs.version }}"
         echo "ARCHIVE=mk-$version-${{ matrix.target }}" >> $GITHUB_ENV
 
-    # - name: Creating directory for archive
-    #   shell: bash
-    #   run: |
-    #     mkdir -p "$ARCHIVE"/{complete,doc}
-    #     cp "$BIN" "$ARCHIVE"/
-    #     cp {README.md,COPYING,UNLICENSE,LICENSE-MIT} "$ARCHIVE"/
-    #     cp {CHANGELOG.md,FAQ.md,GUIDE.md} "$ARCHIVE"/doc/
-
-    # - name: Build archive (Windows)
-    #   shell: bash
-    #   if: matrix.os == 'windows-latest'
-    #   run: |
-    #     7z a "$ARCHIVE.zip" "$ARCHIVE"
-    #     certutil -hashfile "$ARCHIVE.zip" SHA256 > "$ARCHIVE.zip.sha256"
-    #     echo "ASSET=$ARCHIVE.zip" >> $GITHUB_ENV
-    #     echo "ASSET_SUM=$ARCHIVE.zip.sha256" >> $GITHUB_ENV
+    - name: Creating directory for archive
+      shell: bash
+      run: |
+        mkdir -p "$ARCHIVE"/
+        cp "$BIN" "$ARCHIVE"/
 
     - name: Build archive (Unix)
       shell: bash
@@ -247,64 +192,3 @@ jobs:
       run: |
         version="${{ needs.create-release.outputs.version }}"
         gh release upload "$version" ${{ steps.archive.outputs.asset }} ${{ steps.archive.outputs.asset_sum }}
-
-  # build-release-deb:
-  #   name: build-release-deb
-  #   needs: ['create-release']
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     TARGET: x86_64-unknown-linux-musl
-  #     # Emit backtraces on panics.
-  #     # RUST_BACKTRACE: 1
-
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v4
-
-  #   # - name: Install packages (Ubuntu)
-  #   #   shell: bash
-  #   #   run: |
-  #   #     ci/ubuntu-install-packages
-
-  #   - name: Install Rust
-  #     uses: dtolnay/rust-toolchain@master
-  #     with:
-  #       toolchain: nightly
-  #       target: ${{ env.TARGET }}
-
-  #   - name: Install cargo-deb
-  #     shell: bash
-  #     run: |
-  #       cargo install cargo-deb
-
-  #   - name: Create deployment directory
-  #     shell: bash
-  #     run: |
-  #       dir=deployment/deb
-  #       mkdir -p "$dir"
-  #       echo "DEPLOY_DIR=$dir" >> $GITHUB_ENV
-
-  #   - name: Build release binary
-  #     shell: bash
-  #     run: |
-  #       cargo deb --profile deb --target ${{ env.TARGET }}
-  #       version="${{ needs.create-release.outputs.version }}"
-  #       echo "DEB_DIR=target/${{ env.TARGET }}/debian" >> $GITHUB_ENV
-  #       echo "DEB_NAME=mk_$version-1_amd64.deb" >> $GITHUB_ENV
-
-  #   - name: Create sha256 sum of deb file
-  #     shell: bash
-  #     run: |
-  #       cd "$DEB_DIR"
-  #       sum="$DEB_NAME.sha256"
-  #       shasum -a 256 "$DEB_NAME" > "$sum"
-  #       echo "SUM=$sum" >> $GITHUB_ENV
-
-  #   - name: Upload release archive
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     shell: bash
-  #     run: |
-  #       cd "$DEB_DIR"
-  #       version="${{ needs.create-release.outputs.version }}"
-  #       gh release upload "$version" "$DEB_NAME" "$SUM"
