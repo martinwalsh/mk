@@ -79,12 +79,6 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        build:
-          - linux
-          - macos
-          - macos-arm
-          # - win-msvc
-          # - win32-msvc
         include:
         - build: linux
           os: ubuntu-latest
@@ -106,26 +100,10 @@ jobs:
           rust: stable
           target: aarch64-apple-darwin
           name: aarch64-macos
-        # - build: win-msvc
-        #   os: windows-latest
-        #   rust: stable
-        #   target: x86_64-pc-windows-msvc
-        #   name: x86_64-windows
-        # - build: win32-msvc
-        #   os: windows-latest
-        #   rust: stable
-        #   target: i686-pc-windows-msvc
-        #   name: x86-windows
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    # - name: Install packages (Ubuntu)
-    #   if: matrix.os == 'ubuntu-latest'
-    #   shell: bash
-    #   run: |
-    #     ci/ubuntu-install-packages
 
     - name: Install Rust
       uses: dtolnay/rust-toolchain@master
@@ -165,30 +143,14 @@ jobs:
       shell: bash
       run: |
         ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
-        bin="target/${{ matrix.target }}/release/mk"
-        echo "BIN=$bin" >> $GITHUB_ENV
-
-    # Is this needed?
-    # - name: Strip release binary (macos)
-    #   if: matrix.os == 'macos-latest'
-    #   shell: bash
-    #   run: strip "$BIN"
-
-    # - name: Strip release binary (cross)
-    #   if: env.CARGO == 'cross'
-    #   shell: bash
-    #   run: |
-    #     docker run --rm -v \
-    #       "$PWD/target:/target:Z" \
-    #       "ghcr.io/cross-rs/${{ matrix.target }}:main" \
-    #       "${{ matrix.strip }}" \
-    #       "/$BIN"
-    # end
+        echo "OUT=target/${{ matrix.target }}/release/mk" >> $GITHUB_ENV
 
     - name: Create archive (Unix)
       shell: bash
       if: matrix.os != 'windows-latest'
       run: |
+        BIN="mk-${{ matrix.name }}"
+        cp "$OUT" "$BIN"
         gzip "$BIN"
         shasum -a 256 "${BIN}.gz" > "${BIN}.gz.sha256"
         echo "asset=${BIN}.gz" >> $GITHUB_OUTPUT
