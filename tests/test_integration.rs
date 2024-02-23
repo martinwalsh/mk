@@ -27,8 +27,12 @@ fn traversal_stops_at_the_dot_git_directory() -> Result<(), Box<dyn Error>> {
         .env("RUST_LOG", "DEBUG")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("ERROR mk] No Makefile found in the project!"))
-        .stderr(predicate::str::contains("DEBUG mk] Reached the root of the project."));
+        .stderr(predicate::str::contains(
+            "ERROR mk] No Makefile found in the project!",
+        ))
+        .stderr(predicate::str::contains(
+            "DEBUG mk] Reached the root of the project.",
+        ));
 
     Ok(())
 }
@@ -114,7 +118,9 @@ fn shows_make_error_if_an_invalid_target_is_used() -> Result<(), Box<dyn Error>>
         .arg("invalid")
         .assert()
         .failure()
-        .stderr(predicate::str::contains(r#"*** No rule to make target `invalid'"#));
+        .stderr(predicate::str::contains(
+            r#"*** No rule to make target `invalid'"#,
+        ));
 
     Ok(())
 }
