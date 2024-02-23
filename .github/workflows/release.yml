@@ -29,8 +29,8 @@ jobs:
 
       - name: Get the release version from the tag
         run: |
-          echo "VERSION=${{ github.event.inputs.version || github.ref_name }}" >> $GITHUB_ENV
-          echo "version=${{ github.event.inputs.version || github.ref_name }}" >> $GITHUB_OUTPUT
+          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
         id: version
 
       - name: Show the version
