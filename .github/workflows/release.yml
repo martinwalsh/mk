@@ -105,74 +105,80 @@ jobs:
           name: aarch64-macos
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@master
-      with:
-        toolchain: ${{ matrix.rust }}
-        target: ${{ matrix.target }}
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+          target: ${{ matrix.target }}
 
-    - name: Use Cross
-      if: matrix.os == 'ubuntu-latest' && matrix.target != ''
-      shell: bash
-      run: |
-        # In the past, new releases of 'cross' have broken CI. So for now, we
-        # pin it. We also use their pre-compiled binary releases because cross
-        # has over 100 dependencies and takes a bit to compile.
-        dir="$RUNNER_TEMP/cross-download"
-        mkdir "$dir"
-        echo "$dir" >> $GITHUB_PATH
-        cd "$dir"
-        curl -LO "https://github.com/cross-rs/cross/releases/download/$CROSS_VERSION/cross-x86_64-unknown-linux-musl.tar.gz"
-        tar xf cross-x86_64-unknown-linux-musl.tar.gz
-        echo "CARGO=cross" >> $GITHUB_ENV
+      - name: Use Cross
+        if: matrix.os == 'ubuntu-latest' && matrix.target != ''
+        shell: bash
+        run: |
+          # In the past, new releases of 'cross' have broken CI. So for now, we
+          # pin it. We also use their pre-compiled binary releases because cross
+          # has over 100 dependencies and takes a bit to compile.
+          dir="$RUNNER_TEMP/cross-download"
+          mkdir "$dir"
+          echo "$dir" >> $GITHUB_PATH
+          cd "$dir"
+          curl -LO "https://github.com/cross-rs/cross/releases/download/$CROSS_VERSION/cross-x86_64-unknown-linux-musl.tar.gz"
+          tar xf cross-x86_64-unknown-linux-musl.tar.gz
+          echo "CARGO=cross" >> $GITHUB_ENV
 
-    - name: Set target variables
-      shell: bash
-      run: |
-        echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
-        echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
+      - name: Set target variables
+        shell: bash
+        run: |
+          echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
+          echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
 
-    - name: Show command used for Cargo
-      shell: bash
-      run: |
-        echo "cargo command is: ${{ env.CARGO }}"
-        echo "target flag is: ${{ env.TARGET_FLAGS }}"
-        echo "target dir is: ${{ env.TARGET_DIR }}"
+      - name: Show command used for Cargo
+        shell: bash
+        run: |
+          echo "cargo command is: ${{ env.CARGO }}"
+          echo "target flag is: ${{ env.TARGET_FLAGS }}"
+          echo "target dir is: ${{ env.TARGET_DIR }}"
 
-    - name: Build release binary
-      shell: bash
-      run: |
-        ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
-        echo "outfile=target/${{ matrix.target }}/release/mk" >> $GITHUB_OUTPUT
-        echo "name=mk-${{ matrix.name }}" >> $GITHUB_OUTPUT
-      id: binary
+      - name: Build release binary
+        shell: bash
+        run: |
+          ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
+          echo "outfile=target/${{ matrix.target }}/release/mk" >> $GITHUB_OUTPUT
+          echo "name=mk-${{ matrix.name }}" >> $GITHUB_OUTPUT
+        id: binary
 
-    - name: Create archive (Unix)
-      shell: bash
-      if: matrix.os != 'windows-latest'
-      run: |
-        cp "${{ steps.binary.outputs.outfile }}" "${{ steps.binary.outputs.name }}"
-        gzip "${{ steps.binary.outputs.name }}"
-        shasum -a 256 "${{ steps.binary.outputs.name }}.gz" > "${{ steps.binary.outputs.name }}.gz.sha256"
-        echo "asset=${{ steps.binary.outputs.name }}.gz" >> $GITHUB_OUTPUT
-        echo "asset_sum=${{ steps.binary.outputs.name }}.gz.sha256" >> $GITHUB_OUTPUT
-      id: archive
+      - name: Create archive (Unix)
+        shell: bash
+        if: matrix.os != 'windows-latest'
+        run: |
+          cp "${{ steps.binary.outputs.outfile }}" "${{ steps.binary.outputs.name }}"
+          gzip "${{ steps.binary.outputs.name }}"
+          shasum -a 256 "${{ steps.binary.outputs.name }}.gz" > "${{ steps.binary.outputs.name }}.gz.sha256"
+          echo "asset=${{ steps.binary.outputs.name }}.gz" >> $GITHUB_OUTPUT
+          echo "asset_sum=${{ steps.binary.outputs.name }}.gz.sha256" >> $GITHUB_OUTPUT
+        id: archive
 
-    - name: Upload release archive
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: bash
-      run: |
-        gh release upload "${{ needs.create-release.outputs.version }}" "${{ steps.archive.outputs.asset }}" "${{ steps.archive.outputs.asset_sum }}"
+      - name: Upload release archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload \
+            "${{ needs.create-release.outputs.version }}" \
+            "${{ steps.archive.outputs.asset }}" \
+            "${{ steps.archive.outputs.asset_sum }}"
 
   publish-release:
     name: publish-release
     needs: ['build-release', 'create-release']
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Finalize Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
