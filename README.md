@@ -9,7 +9,7 @@ GNU make, named `mk`.
 tool for automating routine tasks from instructions defined in a `Makefile`,
 designed to manage software in compiled languages, like C or C++, allowing the
 efficient handling of dependencies between source files and avoiding unnecessary
-compilation. But, the ubiquity of make and its straightforward syntax make it an
+compilation. But the ubiquity of make and its straightforward syntax make it an
 ideal choice as a general-purpose automation tool. As a result, it is present in
 countless software projects of all kinds.
 
@@ -17,7 +17,6 @@ countless software projects of all kinds.
 
 - Make has been around a looooong time. It's stable, and may be installed in your dev environment already.
 - It can be used to automate any task that can be executed as a shell command.
-- The use of variables, dependencies and pattern rules in a Makefile can reduce repetition and complexity, making it easier to manage and understand the build process.
 - Make provides primitives, like variables, dependencies and pattern rules, that can be used to reduce repetition and complexity.
 - Make provides a standard interface so that you can build multiple projects the same way, reducing cognitive load.
 - Makefiles are self-documenting by nature, and significantly improved by introducing `mk`.
@@ -25,9 +24,9 @@ countless software projects of all kinds.
 ### What is `mk`?
 
 I'm using this project as an opportunity to learn the
-[Rust](https://www.rust-lang.org/) programming language. So, you should keep in
-mind that I'm a beginner here. Nonetheless, you may find it a useful tool
-whether you're already using GNU Make, or just starting a new project.
+[Rust](https://www.rust-lang.org/) programming language. Therefore, you should
+keep in mind that I'm a beginner here. Nonetheless, you may find it a useful
+tool whether you're already using GNU Make, or just starting a new project.
 
 The `mk` wrapper program is intended to offer additional convenience features
 absent from GNU Make itself.
@@ -122,7 +121,7 @@ Commands:
 #### Makefile discovery
 
 The GNU make command requires that you are running in a terminal at the root of
-your project. I don't know about you, but I find this annoying.
+your project, which can be cumbersome.
 
 When executed within your project, the `mk` command will traverse the filesystem
 upward until it locates a `Makefile`, and then execute a `make` command with the
