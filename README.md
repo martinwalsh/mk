@@ -1,3 +1,5 @@
+![ci workflow](https://github.com/martinwalsh/mk/actions/workflows/ci.yml/badge.svg)
+
 # mk
 
 ## Introduction
