@@ -82,7 +82,7 @@ fi
 
 INSTALL_DIR="${HOME}/.local/bin"
 mkdir -p "${INSTALL_DIR}"
-cp -i ${TEMP_FILE} "${INSTALL_DIR}/${NAME}"
+cp -v ${TEMP_FILE} "${INSTALL_DIR}/${NAME}"
 
 echo "Successfully installed ${NAME} (${VERSION}) to ${INSTALL_DIR}/${NAME}"
 echo "Please add ${INSTALL_DIR} to your PATH to use ${NAME}."
