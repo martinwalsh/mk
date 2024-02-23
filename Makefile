@@ -21,9 +21,9 @@ lint:
 .PHONY: lint
 
 #> Run cargo fmt
-#> Use `CHECK=1` to check formatting without modifying files
+#> Use `FIX=yes` to automatically fix formatting issues
 format:
-	cargo fmt --all $(if $(CHECK),-- --check)
+	cargo fmt --all $(if $(FIX),,-- --check)
 .PHONY: format
 
 #> Print this helpful message
