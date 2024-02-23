@@ -1,4 +1,4 @@
-![ci workflow](https://github.com/martinwalsh/mk/actions/workflows/ci.yml/badge.svg)
+[![ci workflow](https://github.com/martinwalsh/mk/actions/workflows/ci.yml/badge.svg)](https://github.com/martinwalsh/mk/actions/workflows/ci.yml)
 
 # mk
 
