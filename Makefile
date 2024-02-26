@@ -1,6 +1,5 @@
 #> The `mk` command wraps make targets, allowing you to run them from anywhere in the project.
 
-
 target/debug/mk:
 	cargo build --all
 

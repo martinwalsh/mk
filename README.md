@@ -8,12 +8,14 @@ Welcome makers! This project introduces an experimental convenience wrapper for
 GNU make, named `mk`.
 
 [GNU Make](https://www.gnu.org/software/make/) is a widely used command-line
-tool for automating routine tasks from instructions defined in a `Makefile`,
-designed to manage software in compiled languages, like C or C++, allowing the
-efficient handling of dependencies between source files and avoiding unnecessary
-compilation. But the ubiquity of make and its straightforward syntax make it an
-ideal choice as a general-purpose automation tool. As a result, it is present in
-countless software projects of all kinds.
+tool for automating routine tasks from instructions defined in a `Makefile`. It
+was designed to manage software in compiled languages, like C or C++, allowing
+the efficient handling of dependencies between source files and avoiding
+unnecessary compilation.
+
+The ubiquity of make and its straightforward syntax also make it an ideal choice
+as a general-purpose automation tool. As a result, it is present in countless
+software projects of all kinds.
 
 #### Benefits of GNU Make
 
@@ -26,13 +28,13 @@ countless software projects of all kinds.
 ### What is `mk`?
 
 I'm using this project as an opportunity to learn the [Rust](https://www.rust-lang.org/)
-programming language. So you should keep in mind that I'm a beginner.
+programming language, so keep that in mind.
 
 Nonetheless, I believe you will find `mk` useful whether GNU Make is already
 part of your project, or you are just beginning a new one.
 
-The `mk` command is intended to offer a minimal set of additional convenience
-features absent from GNU Make itself.
+The `mk` command is intended to offer a minimal set of additional conveniences
+absent from GNU Make itself.
 
 - Execution from any directory in a software project
 - Automated generation of `help` text
