@@ -11,7 +11,7 @@ Welcome makers! This project introduces an experimental convenience wrapper for
 GNU make, named `mk`.
 
 [GNU Make](https://www.gnu.org/software/make/) is a widely used command-line
-tool for automating routine tasks from instructions defined in a `Makefile`. It
+tool for automating routine tasks with instructions defined in a `Makefile`. It
 was designed to manage software in compiled languages, like C or C++, allowing
 the efficient handling of dependencies between source files and avoiding
 unnecessary compilation.
@@ -26,12 +26,12 @@ software projects of all kinds.
 - It can be used to automate any task that can be executed as a shell command.
 - It provides primitives, like variables and dependencies, that can be used to reduce repetition and complexity.
 - It has a standard interface so you can build multiple projects the same way, reducing cognitive load.
-- Makefiles are self-documenting, by nature. Even more so after introducing `mk`.
+- Makefiles are self-documenting, by nature. More so after introducing `mk`.
 
 ### What is `mk`?
 
 I'm using this project as an opportunity to learn the [Rust](https://www.rust-lang.org/)
-programming language, so keep that in mind.
+programming language, so you should keep that in mind.
 
 Nonetheless, I believe you will find `mk` useful whether GNU Make is already
 part of your project, or you are just beginning a new one.
@@ -41,6 +41,7 @@ absent from GNU Make itself.
 
 - Execution from any directory in a software project
 - Automated generation of `help` text
+- The ability to download make helper "libraries"
 
 #### Makefile discovery
 
@@ -49,48 +50,22 @@ project, which can be cumbersome.
 
 The `mk` command, on the other hand, will traverse the filesystem upward until
 it locates a `Makefile` -- when executed anywhere in the project -- and then
-execute the corresponding `make` command with the supplied arguments, in the
+run the corresponding `make` command with the supplied arguments, in the
 directory where the `Makefile` was found.
 
 #### Automated help text
 
-By default, the `mk` command will parse your `Makefile` and generate help text
-for all of the make targets discovered. For example:
-
-```Makefile
-# Makefile
-build:
-    @echo "building ..."
-
-test:
-    @echo "testing ..."
-
-.PHONY: build test
-
-```
-
-```sh
-$ mk --help
-...
-Usage: mk [OPTIONS] [COMMAND]
-
-Commands:
-  build
-  test
-...
-```
-
-With the addition of comments prefixed with `#>`, placed above a target
+With the addition of comments prefixed with `#|`, placed before a target
 definition, the `mk` command will include them in the help output. For example:
 
 ```Makefile
 # Makefile
 
-#> Builds the project
+#| Builds the project
 build:
     @echo "building ..."
 
-#> Runs the tests
+#| Runs the tests
 test:
     @echo "testing ..."
 
@@ -113,8 +88,8 @@ Commands:
 You can provide multiple lines of special-purpose comments, and they will be reflected in the generated help text.
 
 ```Makefile
-#> Runs cargo fmt
-#> Use FIX=yes to automatically fix files
+#| Runs cargo fmt
+#| Use FIX=yes to automatically fix files
 format:
     cargo fmt $(if $(FIX),,--check)
 ```
@@ -137,7 +112,7 @@ To install, visit the [releases](https://github.com/martinwalsh/mk/releases)
 page, download the appropriate version for your system, extract the `mk` binary,
 and add it to your system's `PATH`.
 
-Alternatively, you can execute the following in a terminal:
+Alternatively, you can execute the following command in a terminal:
 
 ```sh
 curl -sSL https://mk.brightops.dev/r/latest | bash
@@ -145,8 +120,8 @@ curl -sSL https://mk.brightops.dev/r/latest | bash
 
 ## Usage
 
-The following usage examples rely on the [`Makefile`](./Makefile) in this project, but the
-examples apply to any project containing a `Makefile`.
+The following usage examples display the output of `mk` when executed in this project,
+but they can be applied similarly to any project containing a [`Makefile`](./Makefile).
 
 Running `mk` without arguments, produces `--help` output.
 
