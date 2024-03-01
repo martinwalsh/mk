@@ -1,34 +1,38 @@
 use std::error::Error;
 use std::process;
 
+use crate::makefile::Makefile;
+
+mod cli;
+mod help;
+mod makefile;
+
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
-    // let cwd = env::current_dir()?;
-    let cli = mk::CommandLine::new();
-
-    let mut makefile = mk::Makefile::new();
-    log::debug!("Found Makefile at: {:?}", makefile.cwd);
-
-    // Traverse upwards through the filesystem, stop if we find a
-    // Makefile and parse it, or if we see a .git directory signifying
-    // the root of the project.
-    match makefile.find_and_parse() {
-        Ok(_) => {}
+    // Traverses upwards in the filesystem, stops if we find a Makefile
+    // and then parses it (or stops and fails if a .git directory is found first).
+    let makefile = match Makefile::new(None) {
+        Ok(m) => m,
         Err(e) => {
             log::error!("{}", e);
             process::exit(1);
         }
+    };
+    log::debug!("Using Makefile at: {:?}", makefile.path);
+
+    let cli = cli::RawArgumentParser::new();
+    if cli.has_raw_args {
+        if let Some(parent) = makefile.path.parent() {
+            cli::makecmd(&cli.raw_args, parent)?;
+        }
     }
 
-    if cli.args_found {
-        cli.run("make".to_string(), &cli.args, &makefile.cwd)?;
-    }
-
-    let mut parser = makefile.get_arg_parser();
+    let mut parser = help::make_help(makefile.about, makefile.postscript, makefile.targets);
 
     // Store the rendered help text for later use.
     let help = parser.render_help();
+
     // This finalizes the argument parser and takes ownership.
     let matches = parser.get_matches();
 

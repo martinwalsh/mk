@@ -1,6 +1,6 @@
 [package]
 name = "mk"
-version = "0.2.4"
+version = "0.2.5"
 description = "An experimental command-line wrapper for GNU Make."
 edition = "2021"
 
@@ -14,5 +14,6 @@ regex = "1.10.3"
 
 [dev-dependencies]
 assert_cmd = {version = "2.0.14", features = ["color-auto"]}
+insta-cmd = "0.5.0"
 predicates = "3.1.0"
 tempfile = "3.10.0"

@@ -1,0 +1,13 @@
+---
+source: tests/test_cli.rs
+info:
+  program: mk
+  args:
+    - included
+---
+success: true
+exit_code: 0
+----- stdout -----
+This is another successful test.
+
+----- stderr -----

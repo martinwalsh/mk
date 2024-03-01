@@ -1,0 +1,20 @@
+---
+source: tests/test_cli.rs
+info:
+  program: mk
+  args:
+    - "-h"
+---
+success: true
+exit_code: 0
+----- stdout -----
+An experimental command-line wrapper for GNU Make.
+
+Usage: mk [OPTIONS]
+
+Options:
+      --me       Run an internal `mk` command
+  -h, --help     Print help
+  -V, --version  Print version
+
+----- stderr -----

@@ -1,0 +1,15 @@
+---
+source: tests/test_cli.rs
+info:
+  program: mk
+  args:
+    - test
+  env:
+    ENVVAR: success
+---
+success: true
+exit_code: 0
+----- stdout -----
+ENVVAR is success.
+
+----- stderr -----

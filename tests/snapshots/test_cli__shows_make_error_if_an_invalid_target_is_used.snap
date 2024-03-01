@@ -1,0 +1,13 @@
+---
+source: tests/test_cli.rs
+info:
+  program: mk
+  args:
+    - invalid
+---
+success: false
+exit_code: 2
+----- stdout -----
+
+----- stderr -----
+make[1]: *** No rule to make target `invalid'.  Stop.

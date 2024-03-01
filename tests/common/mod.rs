@@ -11,6 +11,13 @@ pub struct Space {
     pub workdir: PathBuf,
 }
 
+pub fn dedent(text: &str) -> String {
+    text.lines()
+        .map(|line| line.trim_start())
+        .collect::<Vec<&str>>()
+        .join("\n")
+}
+
 impl Space {
     pub fn new() -> Self {
         let tempdir = TempDir::with_prefix(".mk-tests---").unwrap();
@@ -37,6 +44,14 @@ impl Space {
         let fixture = thisdir.join("fixtures").join(name).with_extension("mk");
 
         fs::read_to_string(fixture).unwrap()
+    }
+
+    pub fn add_include(&self, dir: &str, name: &str, content: &str) -> Result<(), Box<dyn Error>> {
+        let include = self.workdir.join(dir).join(format!("{name}.mk"));
+        fs::create_dir_all(&include.parent().unwrap())?;
+        fs::write(&include, content)?;
+
+        Ok(())
     }
 
     pub fn from_fixture(name: &str) -> Result<Space, Box<dyn Error>> {
