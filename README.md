@@ -2,6 +2,9 @@
 
 # mk
 
+[!IMPORTANT] 
+I am using this project to learn Rust. Feedback, suggestions, and contributions are warmly welcomed.
+
 ## Introduction
 
 Welcome makers! This project introduces an experimental convenience wrapper for
