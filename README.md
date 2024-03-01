@@ -2,8 +2,8 @@
 
 # mk
 
-[!IMPORTANT] 
-I am using this project to learn Rust. Feedback, suggestions, and contributions are warmly welcomed.
+> [!IMPORTANT]
+> I am using this project to learn Rust. Feedback, suggestions, and contributions are warmly welcomed.
 
 ## Introduction
 
