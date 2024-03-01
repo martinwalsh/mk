@@ -1,6 +1,6 @@
 [package]
 name = "mk"
-version = "0.2.5"
+version = "0.2.6"
 description = "An experimental command-line wrapper for GNU Make."
 edition = "2021"
 
