@@ -10,7 +10,7 @@ use regex::Regex;
 pub struct Makefile {
     pub path: PathBuf,
     pub about: String,
-    pub postscript: String,
+    pub epilogue: String,
     pub targets: Vec<(String, String)>,
 }
 
@@ -53,7 +53,7 @@ impl Makefile {
         let content = fs::read_to_string(path)?;
 
         let mut about = Vec::new();
-        let mut postscript = Vec::new();
+        let mut epilogue = Vec::new();
 
         let mut seen = HashSet::new();
         let mut targets = Vec::new();
@@ -68,9 +68,9 @@ impl Makefile {
             if let Some(s) = line.strip_prefix("#|") {
                 comments.push(s.trim().to_string());
 
-            // If the line is a `#>` prefixed comment, add it to the postscript vec.
+            // If the line is a `#>` prefixed comment, add it to the epilogue vec.
             } else if let Some(s) = line.strip_prefix("#>") {
-                postscript.push(s.trim().to_string());
+                epilogue.push(s.trim().to_string());
 
             // If the line is a `#<` prefixed comment, add it to the about vec.
             } else if let Some(s) = line.strip_prefix("#<") {
@@ -124,7 +124,7 @@ impl Makefile {
             targets,
             path: path.to_path_buf(),
             about: about.join("\n"),
-            postscript: postscript.join("\n"),
+            epilogue: epilogue.join("\n"),
         })
     }
 }

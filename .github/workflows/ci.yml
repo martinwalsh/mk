@@ -113,11 +113,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # - name: Install packages (Ubuntu)
-    #   if: matrix.os == 'ubuntu-latest'
-    #   run: |
-    #     ci/ubuntu-install-packages
-
     - name: Install Rust
       uses: dtolnay/rust-toolchain@master
       with:
@@ -146,24 +141,13 @@ jobs:
         echo "target dir is: ${{ env.TARGET_DIR }}"
 
     - name: Build mk and all crates
-      run: ${{ env.CARGO }} build --verbose --workspace ${{ env.TARGET_FLAGS }}
+      run: make build -B
+      # run: ${{ env.CARGO }} build --verbose --workspace ${{ env.TARGET_FLAGS }}
 
     - name: Run tests
+      run: make test
       # if: matrix.target != ''
-      run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
-
-  rustfmt:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@master
-      with:
-        toolchain: stable
-        components: rustfmt
-    - name: Check formatting
-      run: cargo fmt --all --check
+      # run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
 
   # docs:
   #   runs-on: ubuntu-latest

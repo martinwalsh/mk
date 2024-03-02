@@ -43,68 +43,19 @@ absent from GNU Make itself.
 - Automated generation of `help` text
 - The ability to download make helper "libraries"
 
-#### Makefile discovery
+#### Makefile Discovery
 
 The GNU make command requires that you execute commands at the root of your
 project, which can be cumbersome.
 
-The `mk` command, on the other hand, will traverse the filesystem upward until
-it locates a `Makefile` -- when executed anywhere in the project -- and then
-run the corresponding `make` command with the supplied arguments, in the
-directory where the `Makefile` was found.
+On the other hand, the `mk` command will traverse the filesystem until it
+locates a project's `Makefile` and then run the corresponding `make` command
+with the supplied arguments in the directory where the `Makefile` was found.
 
-#### Automated help text
+#### Automatic Help Output
 
-With the addition of comments prefixed with `#|`, placed before a target
-definition, the `mk` command will include them in the help output. For example:
-
-```Makefile
-# Makefile
-
-#| Builds the project
-build:
-    @echo "building ..."
-
-#| Runs the tests
-test:
-    @echo "testing ..."
-
-.PHONY: build test
-
-```
-
-```sh
-...
-
-Usage: mk [OPTIONS] [COMMAND]
-
-Commands:
-  build  Builds the project
-  test   Runs the tests
-
-...
-```
-
-You can provide multiple lines of special-purpose comments, and they will be reflected in the generated help text.
-
-```Makefile
-#| Runs cargo fmt
-#| Use FIX=yes to automatically fix files
-format:
-    cargo fmt $(if $(FIX),,--check)
-```
-
-```sh
-$ mk --help
-...
-Usage: mk [OPTIONS] [COMMAND]
-
-Commands:
-  format  Runs cargo fmt
-              Use FIX=yes to automatically fix files
-...
-
-```
+With the addition of comments prefixed by `#|`, and placed before a target
+definition, the `mk` command will automatically include them in the help output.
 
 ## Installation
 
@@ -116,6 +67,12 @@ Alternatively, you can execute the following command in a terminal:
 
 ```sh
 curl -sSL https://mk.brightops.dev/r/latest | bash
+```
+
+To install a specific version, replace `latest` with the tag for the version you'd like to install.
+
+```sh
+curl -sSL https://mk.brightops.dev/r/0.2.7
 ```
 
 ## Usage

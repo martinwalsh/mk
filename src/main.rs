@@ -28,7 +28,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let mut parser = help::make_help(makefile.about, makefile.postscript, makefile.targets);
+    let mut parser = help::make_help(makefile.about, makefile.epilogue, makefile.targets);
 
     // Store the rendered help text for later use.
     let help = parser.render_help();
