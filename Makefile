@@ -61,6 +61,7 @@ bump: | _env_TO
 	$(call sed_i) 's/^version = "$(VERSION)"/version = "$(TO)"/g' Cargo.toml
 	$(call sed_i) 's/^VERSION := "$(VERSION)"/VERSION := $(TO)/g' Makefile
 	$(call sed_i) 's/r\/$(VERSION)/r\/$(TO)/g' README.md
+	$(CARGO) update
 ifndef DR
 	git add .
 	git commit -m "Bump version to $(TO)"
