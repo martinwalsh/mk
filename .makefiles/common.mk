@@ -119,7 +119,8 @@ endif
 # 	$(call sed_i) 's/old/new/g' file.txt
 #
 # Callable that returns an appropriate `sed` in-place command for the current platform.
-sed_i := sed $(if $(filter $(OS_NAME),darwin), -i '', -i'')
+_gnu_sed := $(shell sed --version 2>/dev/null | grep -o 'GNU' | head -1)
+sed_i := sed $(if $(filter $(call _gnu_sed),GNU),-i'',-i '')
 
 
 # $(call with_dryrun, docker-compose push)

@@ -3,6 +3,7 @@
 
 include .makefiles/common.mk
 
+VERSION := 0.3.0
 
 CARGO ?= cargo
 
@@ -55,7 +56,7 @@ update-snapshots: | _cmd_cargo
 
 #| Bump the version and create new tag
 bump:
-	@:
+	$(call sed_i) 's/^version = ".*"/version = "$(VERSION)"/g' Cargo.toml
 .PHONY: bump
 
 
