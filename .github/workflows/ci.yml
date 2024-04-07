@@ -102,7 +102,7 @@ jobs:
         #   target: s390x-unknown-linux-gnu
         - build: macos
           os: macos-latest
-          rust: nightly
+          rust: stable
         # - build: win-msvc
         #   os: windows-2022
         #   rust: nightly
