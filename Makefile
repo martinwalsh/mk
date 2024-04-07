@@ -55,12 +55,17 @@ update-snapshots: | _cmd_cargo
 .PHONY: update-snapshots
 
 #| Bump the version and create new tag
-bump:
-	$(call sed_i) 's/^version = ".*"/version = "$(VERSION)"/g' Cargo.toml
+#| Use `TO=0.4.0` to bump to a specific version
+#| Use `DR=1` to perform a dry run (search and replace only)
+bump: | _env_TO
+	$(call sed_i) 's/^version = "$(VERSION)"/version = "$(TO)"/g' Cargo.toml
+	$(call sed_i) 's/r\/$(VERSION)/r\/$(TO)/g' README.md
+ifndef DR
 	git add .
-	git commit -m "Bump version to $(VERSION)"
-	git tag $(VERSION)
+	git commit -m "Bump version to $(TO)"
+	git tag $(TO)
 	git push --tags
+endif
 .PHONY: bump
 
 

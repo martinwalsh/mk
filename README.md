@@ -72,7 +72,7 @@ curl -sSL https://mk.brightops.dev/r/latest | bash
 To install a specific version, replace `latest` with the tag for the version you'd like to install.
 
 ```sh
-curl -sSL https://mk.brightops.dev/r/0.2.7
+curl -sSL https://mk.brightops.dev/r/0.3.0 | bash
 ```
 
 ## Usage
