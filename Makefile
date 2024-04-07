@@ -66,7 +66,8 @@ ifndef DR
 	git add .
 	git commit -m "Bump version to $(TO)"
 	git tag $(TO)
-	git push origin main --tags
+	git push origin main
+	git push --tags
 endif
 .PHONY: bump
 
@@ -75,3 +76,12 @@ endif
 help: | target/debug/mk
 	@target/debug/mk --help
 .PHONY: help
+
+#| Print info about mk and make
+info:
+	@echo 'The make command is `$(MAKE)`'
+	@echo "The make command version is $$($(MAKE) --version | head -1)"
+	@echo "Command: $$(type $(MAKE))"
+	@echo "The mk command's development version is $(VERSION)"
+	@echo "The mk command's installed version is $$(mk --version)"
+.PHONY: info
