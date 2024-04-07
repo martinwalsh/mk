@@ -3,7 +3,7 @@
 
 include .makefiles/common.mk
 
-VERSION := 0.3.3
+VERSION := 0.3.4
 
 CARGO ?= cargo
 
@@ -59,7 +59,7 @@ update-snapshots: | _cmd_cargo
 #| Use `DR=1` to perform a dry run (search and replace only)
 bump: | _env_TO
 	$(call sed_i) 's/^version = "$(VERSION)"/version = "$(TO)"/g' Cargo.toml
-	$(call sed_i) 's/^VERSION := "$(VERSION)"/VERSION := $(TO)/g' Makefile
+	$(call sed_i) 's/^VERSION := $(VERSION)/VERSION := $(TO)/g' Makefile
 	$(call sed_i) 's/r\/$(VERSION)/r\/$(TO)/g' README.md
 	$(CARGO) update
 ifndef DR
