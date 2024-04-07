@@ -2,6 +2,7 @@ use assert_cmd::prelude::*;
 use insta_cmd::assert_cmd_snapshot;
 use predicates::prelude::*;
 use std::error::Error;
+use std::{env, fs};
 
 use crate::common::{dedent, Space};
 mod common;
@@ -160,6 +161,18 @@ fn skips_help_for_targets_without_documentation() -> Result<(), Box<dyn Error>> 
         .assert()
         .success()
         .stdout(predicate::str::contains("test-me").count(0));
+
+    Ok(())
+}
+
+#[test]
+fn knows_its_calling_current_working_directory() -> Result<(), Box<dyn Error>> {
+    let space = Space::from_fixture("cwd")?;
+    let subdir = space.workdir.join("subdir");
+
+    fs::create_dir(&subdir)?;
+
+    assert_cmd_snapshot!(space.bin_with_cwd(subdir).arg("cwd"));
 
     Ok(())
 }

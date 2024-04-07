@@ -57,3 +57,9 @@ update-snapshots: | _cmd_cargo
 bump:
 	@:
 .PHONY: bump
+
+
+#| Show this help message
+help: | target/debug/mk
+	@target/debug/mk --help
+.PHONY: help

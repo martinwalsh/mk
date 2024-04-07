@@ -156,10 +156,10 @@ _todo: _cmd_git
 # HELP
 #
 
-#| Print this helpful message
-help::
-	@$(if $(shell command -v mk 2>/dev/null), mk --help)
-.PHONY: help
+# #| Print this helpful message
+# help::
+# 	@$(if $(shell command -v mk 2>/dev/null), mk --help)
+# .PHONY: help
 
 
 ###############################################################################

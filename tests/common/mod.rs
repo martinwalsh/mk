@@ -38,12 +38,18 @@ impl Space {
         cmd
     }
 
-    fn fixture(name: String) -> String {
+    pub fn bin_with_cwd(&self, workdir: PathBuf) -> Command {
+        let mut cmd = Command::cargo_bin("mk").unwrap();
+        cmd.current_dir(&workdir);
+        cmd
+    }
+
+    fn fixture(name: String) -> Result<String, Box<dyn Error>> {
         let this = file!();
         let thisdir = Path::new(this).parent().unwrap();
         let fixture = thisdir.join("fixtures").join(name).with_extension("mk");
 
-        fs::read_to_string(fixture).unwrap()
+        Ok(fs::read_to_string(fixture)?)
     }
 
     pub fn add_include(&self, dir: &str, name: &str, content: &str) -> Result<(), Box<dyn Error>> {
@@ -56,7 +62,7 @@ impl Space {
 
     pub fn from_fixture(name: &str) -> Result<Space, Box<dyn Error>> {
         let space = Self::new();
-        let content = Space::fixture(name.to_string());
+        let content = Space::fixture(name.to_string())?;
         let makefile = space.workdir.join("Makefile");
 
         fs::write(&makefile, content)?;

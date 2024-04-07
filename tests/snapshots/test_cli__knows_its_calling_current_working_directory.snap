@@ -1,0 +1,14 @@
+---
+source: tests/test_cli.rs
+info:
+  program: mk
+  args:
+    - cwd
+---
+success: true
+exit_code: 0
+----- stdout -----
+Called in: workspace
+Called from: subdir
+
+----- stderr -----

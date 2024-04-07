@@ -1,10 +1,13 @@
 use std::ffi::OsString;
 use std::os::unix::process::CommandExt;
 use std::path::Path;
-use std::{error, process};
+use std::{env, error, process};
 
 pub fn makecmd(args: &Vec<OsString>, cwd: &Path) -> Result<(), Box<dyn error::Error>> {
     log::debug!("Will execute and exec: make | {:?}", args);
+
+    // Keep track of the calling cwd for use in the Makefile.
+    env::set_var("MK_CWD", env::current_dir()?.as_os_str());
 
     process::Command::new("make")
         .args(args)
