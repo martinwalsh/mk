@@ -59,12 +59,13 @@ update-snapshots: | _cmd_cargo
 #| Use `DR=1` to perform a dry run (search and replace only)
 bump: | _env_TO
 	$(call sed_i) 's/^version = "$(VERSION)"/version = "$(TO)"/g' Cargo.toml
+	$(call sed_i) 's/^VERSION := "$(VERSION)"/VERSION := $(TO)/g' Makefile
 	$(call sed_i) 's/r\/$(VERSION)/r\/$(TO)/g' README.md
 ifndef DR
 	git add .
 	git commit -m "Bump version to $(TO)"
 	git tag $(TO)
-	git push --tags
+	git push origin main --tags
 endif
 .PHONY: bump
 
