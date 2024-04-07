@@ -3,7 +3,7 @@
 
 include .makefiles/common.mk
 
-VERSION := 0.3.0
+VERSION := 0.3.3
 
 CARGO ?= cargo
 
