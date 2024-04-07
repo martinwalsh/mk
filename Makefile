@@ -57,6 +57,10 @@ update-snapshots: | _cmd_cargo
 #| Bump the version and create new tag
 bump:
 	$(call sed_i) 's/^version = ".*"/version = "$(VERSION)"/g' Cargo.toml
+	git add .
+	git commit -m "Bump version to $(VERSION)"
+	git tag $(VERSION)
+	git push --tags
 .PHONY: bump
 
 
